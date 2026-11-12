@@ -6,8 +6,7 @@
 
 
 from inventory import Inventory
-from physical_product import PhysicalProduct
-from digital_product import DigitalProduct
+from product_factory import ProductFactory
 from file_handler import save_inventory, load_inventory, INVENTORY_FILE
 from product import Product
 from supplier import Supplier
@@ -27,12 +26,12 @@ def create_default_products() -> list[Product]:
 
 
     return [
-        PhysicalProduct("1001", "Keyboard", 30.00, 10, tech_supplier, 0.8),
-        PhysicalProduct("1002", "Mouse", 20.00, 15, tech_supplier, 0.1),
-        PhysicalProduct("1003", "Monitor", 150.00, 5, tech_supplier, 4.5),
-        PhysicalProduct("1004", "Printer", 200.00, 3, tech_supplier, 7.0),
-        DigitalProduct("1005", "Photo Editor", 59.90, 100, soft_supplier, 250.0),
-        DigitalProduct("1006", "E-book", 15.00, 100, soft_supplier, 5.0),
+        ProductFactory.create("physical", "1001", "Keyboard", 30.00, 10, tech_supplier, 0.8),
+        ProductFactory.create("physical", "1002", "Mouse", 20.00, 15, tech_supplier, 0.1),
+        ProductFactory.create("physical", "1003", "Monitor", 150.00, 5, tech_supplier, 4.5),
+        ProductFactory.create("physical", "1004", "Printer", 200.00, 3, tech_supplier, 7.0),
+        ProductFactory.create("digital", "1005", "Photo Editor", 59.90, 100, soft_supplier, 250.0),
+        ProductFactory.create("digital", "1006", "E-book", 15.00, 100, soft_supplier, 5.0),
     ]
 
 def show_menu():
@@ -85,13 +84,13 @@ def add_product_input(inventory: Inventory) -> None :
     stock: int = int(input("Enter Product Stock: "))
     supplier: Supplier = ask_supplier(inventory)
 
-    new_product = Product
+    
     if type_choice == '1':
         weight: float = float(input("Enter Product Weight (in kg): "))
-        new_product = PhysicalProduct(product_id, name, price, stock, supplier, weight)
+        new_product = ProductFactory.create("physical", product_id, name, price, stock, supplier, weight)
     else:
         download_size: float = float(input("Enter Product Download Size (in MB): "))
-        new_product = DigitalProduct(product_id, name, price, stock, supplier, download_size)
+        new_product = ProductFactory.create("digital", product_id, name, price, stock, supplier, download_size)
 
     if inventory.add_product(new_product):
         print(f"Product {name} added successfully!")

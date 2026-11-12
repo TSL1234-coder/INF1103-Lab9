@@ -3,6 +3,7 @@ import json
 
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
+from product_factory import ProductFactory
 from inventory import Inventory
 from supplier import Supplier
 from product import Product
@@ -77,11 +78,12 @@ def load_inventory(inventory) -> str:
 
 
 
-                product: Product
+              
                 product_type = item["type"]
 
                 if product_type == "physical":
-                    product = PhysicalProduct(
+                    product = ProductFactory.create(
+                        product_type="physical",
                         product_id=item["product_id"],
                         name=item["name"],
                         price=item["price"],
@@ -90,7 +92,8 @@ def load_inventory(inventory) -> str:
                         weight=item["weight"]
                     )
                 elif product_type == "digital":
-                    product = DigitalProduct(
+                    product = ProductFactory.create(
+                        product_type="digital",
                         product_id=item["product_id"],
                         name=item["name"],
                         price=item["price"],
