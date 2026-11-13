@@ -41,4 +41,4 @@ class BulkDiscount(DiscountStrategy):
 # Student Discount (12% Discount)
 class StudentDiscount(DiscountStrategy):
     def apply(self, total: float) -> float:
-        return total * 0.88
+        return total * 0.90
