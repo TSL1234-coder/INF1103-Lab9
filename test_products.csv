@@ -1,0 +1,6 @@
+product_id,name,type,price,stock,weight,download_size
+P001,Laptop,physical,1200,10,2.5,
+P002,Ebook,digital,15,100,,50
+P003,Keyboard,physical,50,20,0.8,
+P004,Invalid Product,physical,-10,5,1.0,
+P005,Invalid Type,unknown,20,5,,

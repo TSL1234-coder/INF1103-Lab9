@@ -1,5 +1,6 @@
 import os
 import json
+import csv
 
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
@@ -110,3 +111,73 @@ def load_inventory(inventory) -> str:
 
     except(OSError, json.JSONDecodeError) as e:
         return "error"
+
+
+
+
+def load_products(
+    path: str,
+    inventory: Inventory,
+    supplier: Supplier
+) -> None:
+
+    loaded_count = 0
+
+    try:
+        with open(path, "r", newline="") as file:
+            reader = csv.DictReader(file)
+            rows = list(reader)
+
+    except FileNotFoundError:
+        print(f"File not found: {path}")
+
+    else:
+        for row in rows:
+            try:
+                product_type = row["type"].strip().lower()
+
+                product_id = row["product_id"]
+                name = row["name"]
+                price = float(row["price"])
+                stock = int(row["stock"])
+
+                if product_type == "physical":
+                    product = ProductFactory.create(
+                        product_type=product_type,
+                        product_id=product_id,
+                        name=name,
+                        price=price,
+                        stock=stock,
+                        supplier=supplier,
+                        weight=float(row["weight"])
+                    )
+
+                elif product_type == "digital":
+                    product = ProductFactory.create(
+                        product_type=product_type,
+                        product_id=product_id,
+                        name=name,
+                        price=price,
+                        stock=stock,
+                        supplier=supplier,
+                        download_size=float(row["download_size"])
+                    )
+
+                else:
+                    raise ValueError(
+                        f"Unknown product type: {product_type}"
+                    )
+
+                if inventory.add_product(product):
+                    loaded_count += 1
+
+            except ValueError as e:
+                print(
+                    f"Skipping invalid product "
+                    f"{row.get('product_id', 'Unknown')}: {e}"
+                )
+
+        print(f"Successfully loaded {loaded_count} products.")
+
+    finally:
+        print("Load attempt finished.")
