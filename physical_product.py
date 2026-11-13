@@ -9,6 +9,9 @@ class PhysicalProduct(Product, CanBeShipped):
     RATE_PER_KG = 2.00  # Rate per kilogram in dollars
 
     def __init__(self, product_id: str, name:str, price: float, stock: int, supplier: Supplier, weight: float)-> None:
+        if weight<=0:
+            raise ValueError("Product weight must be greater than 0.")
+
         super().__init__(product_id, name, price, stock, supplier)
         self.__weight: float = weight 
 

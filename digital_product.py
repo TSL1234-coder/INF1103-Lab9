@@ -4,6 +4,10 @@ from supplier import Supplier
 class DigitalProduct(Product):
 
     def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier, download_size: float):
+
+        if download_size <=0:
+            raise ValueError("Download size must be greater than 0.")
+
         super().__init__(product_id, name, price, stock, supplier)
         self.__download_size = download_size
 
