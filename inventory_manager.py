@@ -18,6 +18,20 @@ from supplier import Supplier
 # =================
 # ======================================================================
 
+
+def get_positive_float(prompt: str) -> float:
+    while True:
+        try:
+            value = float(input(prompt))
+
+            if value <= 0:
+                print("Please enter a number greater than 0.")
+                continue
+
+            return value
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
 def create_default_products() -> list[Product]:
 
     # Suppliers created first, then shared with several products
@@ -80,16 +94,16 @@ def add_product_input(inventory: Inventory) -> None :
 
     product_id: str = input("Enter Product ID: ")
     name: str = input("Enter Product Name: ")
-    price: float = float(input("Enter Product Price: "))
+    price: float = get_positive_float("Enter Product Price: ")
     stock: int = int(input("Enter Product Stock: "))
     supplier: Supplier = ask_supplier(inventory)
 
     
     if type_choice == '1':
-        weight: float = float(input("Enter Product Weight (in kg): "))
+        weight: float = get_positive_float("Enter Product Weight (in kg): ")
         new_product = ProductFactory.create("physical", product_id, name, price, stock, supplier, weight)
     else:
-        download_size: float = float(input("Enter Product Download Size (in MB): "))
+        download_size: float = get_positive_float("Enter Product Download Size (in MB): ")
         new_product = ProductFactory.create("digital", product_id, name, price, stock, supplier, download_size)
 
     if inventory.add_product(new_product):
